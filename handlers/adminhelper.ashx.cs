@@ -25,6 +25,9 @@ using System.Data;
 using System.Web;
 using System.Web.Services;
 using System.Text;
+using DotNetNuke.Entities.Modules;
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.Security.Permissions;
 
 namespace DotNetNuke.Modules.ActiveForums.Handlers
 {
@@ -44,10 +47,9 @@ namespace DotNetNuke.Modules.ActiveForums.Handlers
 			RankDelete = 10,
 			FilterGet = 11,
 			FilterSave = 12,
-			FilterDelete = 13
-
-
-
+			FilterDelete = 13,
+            RecycleDelete = 14,
+            RecycleRestore = 15,
 		}
 		public override void ProcessRequest(HttpContext context)
 		{
@@ -105,10 +107,12 @@ namespace DotNetNuke.Modules.ActiveForums.Handlers
 							break;
 						case Actions.FilterDelete:
 							FilterDelete();
-
-
-
-
+                            break;
+                        case Actions.RecycleDelete:
+                            RecycleDelete();
+                            break;
+                        case Actions.RecycleRestore:
+                            RecycleRestore();
 							break;
 					}
 				}
@@ -408,9 +412,44 @@ namespace DotNetNuke.Modules.ActiveForums.Handlers
 			sFile = Utilities.LocalizeControl(sFile, true);
 			return sFile;
 		}
+        
+        private void RecycleDelete()
+        {
+            var module = new ModuleController().GetModule(ModuleId);
+            if (ForumUser.IsAdmin || ForumUser.IsSuperUser || ModulePermissionController.HasModuleAccess(Security.SecurityAccessLevel.Edit, "EDIT", module))
+            {
+                int id = -1;
+                if (Params.ContainsKey("ContentId"))
+                {
+                    id = Convert.ToInt32(Params["ContentId"]);
+                }
+                else if (Params.ContainsKey("TopicId"))
+                {
+                    id = Convert.ToInt32(Params["TopicId"]);
+                }
+                if (id == -1) return;
+            }
+        }
 
+        private void RecycleRestore()
+        {
+            var module = new ModuleController().GetModule(ModuleId);
+            if (ForumUser.IsAdmin || ForumUser.IsSuperUser || ModulePermissionController.HasModuleAccess(Security.SecurityAccessLevel.Edit, "EDIT", module))
+            {
+                int id = -1;
+                if (Params.ContainsKey("ReplyId"))
+                {
 
-
-
-	}
+                    id = Convert.ToInt32(Params["ReplyId"]);
+                    RecycleBin.RestorePost(id);
+                }
+                else if (Params.ContainsKey("TopicId"))
+                {
+                    id = Convert.ToInt32(Params["TopicId"]);
+                    RecycleBin.RestoreTopic(id);
+                }
+                if (id == -1) return;
+            }
+        }
+    }
 }

@@ -22,5 +22,23 @@ namespace DotNetNuke.Modules.ActiveForums.DAL2
             var content = repo.GetById(contentId);
             return content;
         }
+
+        public IEnumerable<Content> Get(string ids)
+        {
+            var contents = repo.Find($"WHERE ContentId in ({ids})");
+            return contents;
+        }
+
+        public void Save(Content content)
+        {
+            if (content.ContentId > 0)
+            {
+                repo.Update(content);
+            }
+            else
+            {
+                repo.Insert(content);
+            }
+        }
     }
 }

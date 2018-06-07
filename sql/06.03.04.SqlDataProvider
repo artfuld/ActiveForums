@@ -1,0 +1,36 @@
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}activeforums_Recyclebin_UndoPostDeletion]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}activeforums_Recyclebin_UndoPostDeletion]
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}vw_activeforums_DeletedPosts]'))
+	DROP VIEW {databaseOwner}[{objectQualifier}vw_activeforums_DeletedPosts]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}activeforums_Recyclebin_RestorePost]
+@PostId int
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	UPDATE {databaseOwner}[{objectQualifier}activeforums_Content]
+	SET IsDeleted = 0
+	WHERE (ContentId = @PostId)
+
+	UPDATE {databaseOwner}[{objectQualifier}activeforums_Replies]
+	SET IsDeleted = 0
+	WHERE (ContentId = @PostId)
+
+END
+GO
+
+CREATE VIEW {databaseOwner}[{objectQualifier}vw_activeforums_DeletedPosts]
+AS
+SELECT        afContent.ContentId, afForums.ModuleId, afContent.Subject, afContent.Body, afContent.AuthorName
+FROM            {databaseOwner}[{objectQualifier}activeforums_Content] AS afContent INNER JOIN
+                         {databaseOwner}[{objectQualifier}activeforums_Replies] AS afReplies ON afContent.ContentId = afReplies.ContentId INNER JOIN
+                         {databaseOwner}[{objectQualifier}activeforums_Topics] AS afTopics ON afReplies.TopicId = afTopics.TopicId INNER JOIN
+                         {databaseOwner}[{objectQualifier}activeforums_ForumTopics] AS afForumTopics ON afReplies.TopicId = afForumTopics.TopicId INNER JOIN
+                         {databaseOwner}[{objectQualifier}activeforums_Forums] AS afForums ON afForumTopics.ForumId = afForums.ForumId
+WHERE        (afContent.IsDeleted = 1) AND (afTopics.IsDeleted = 0) OR
+                         (afTopics.IsDeleted = 0) AND (afReplies.IsDeleted = 1)
+GO

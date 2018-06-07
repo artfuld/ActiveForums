@@ -1444,4 +1444,22 @@ Your removal method is currently set to {0}.  Your topics will be {1} based upon
   <data name="[RESX:AllowLikes].Text" xml:space="preserve">
     <value>Allow Likes</value>
   </data>
+  <data name="[RESX:Recyclebin].Text" xml:space="preserve">
+    <value>Recyclebin</value>
+  </data>
+  <data name="[RESX:RecycledPosts].Text" xml:space="preserve">
+    <value>Deleted posts</value>
+  </data>
+  <data name="[RESX:RecycledTopics].Text" xml:space="preserve">
+    <value>Deleted topics</value>
+  </data>
+  <data name="[RESX:DeleteReplyConfirmation]" xml:space="preserve">
+    <value>Do you want to permanently delete the reply with subject </value>
+  </data>
+  <data name="[RESX:RestoreReplyConfirmation]" xml:space="preserve">
+    <value>Do you want to restore the reply with subject </value>
+  </data>
+  <data name="[RESX:AuthorName].Text" xml:space="preserve">
+    <value>Author name</value>
+  </data>
 </root>

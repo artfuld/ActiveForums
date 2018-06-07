@@ -22,5 +22,29 @@ namespace DotNetNuke.Modules.ActiveForums.DAL2
             var reply = repo.GetById(replyId);
             return reply;
         }
+
+        public Reply GetFromContentId(int contentId)
+        {
+            var reply = repo.Find($"WHERE ContentId = {contentId}").FirstOrDefault();
+            return reply;
+        }
+
+        public void Save(Reply reply)
+        {
+            if (reply.ReplyId > 0)
+            {
+                repo.Update(reply);
+            }
+            else
+            {
+                repo.Insert(reply);
+            }
+        }
+
+        public IEnumerable<Reply> GetFromTopicId(int topicId)
+        {
+            var replies = repo.Find($"WHERE TopicId = {topicId}");
+            return replies;
+        }
     }
 }

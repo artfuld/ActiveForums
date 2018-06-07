@@ -57,7 +57,13 @@ namespace DotNetNuke.Modules.ActiveForums.Controls
 	    [Bindable(true), Category("Appearance"), DefaultValue("")]
 	    public string ImageUrl { get; set; }
 
-	    [Bindable(true), Category("Appearance"), DefaultValue("")]
+        [Bindable(true), Category("Appearance"), DefaultValue("")]
+        public string ImageHeight { get; set; }
+        [Bindable(true), Category("Appearance"), DefaultValue("")]
+        public string ImageWidth { get; set; }
+
+
+        [Bindable(true), Category("Appearance"), DefaultValue("")]
 	    public string NavigateUrl { get; set; }
 
 	    [Bindable(true), Category("Appearance"), DefaultValue("absmiddle")]
@@ -314,67 +320,45 @@ namespace DotNetNuke.Modules.ActiveForums.Controls
 
 			writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-			if (ImageLocation.ToUpper() == "LEFT")
+			var innerWriter = new HtmlTextWriter(writer);
+            if (ImageLocation.ToUpper() == "RIGHT")
+            {
+                innerWriter.Write("<span>" + Text + "</span>");
+            }
+            if (ImageUrl != "")
 			{
-				var innerWriter = new HtmlTextWriter(writer);
-				if (ImageUrl != "")
-				{
-					var imageWriter = new HtmlTextWriter(innerWriter);
-					imageWriter.AddAttribute(HtmlTextWriterAttribute.Src, Page.ResolveUrl(ImageUrl));
-					imageWriter.AddAttribute("hspace", HSpace);
-					imageWriter.AddAttribute("vspace", VSpace);
-					imageWriter.AddAttribute("border", "0");
-					//If [PostBack] Then
+				var imageWriter = new HtmlTextWriter(innerWriter);
+				imageWriter.AddAttribute(HtmlTextWriterAttribute.Src, Page.ResolveUrl(ImageUrl));
+				imageWriter.AddAttribute("hspace", HSpace);
+				imageWriter.AddAttribute("vspace", VSpace);
+				imageWriter.AddAttribute("border", "0");
+                if (ImageHeight != "" || ImageWidth != "")
+                {
+                    var styleString = "";
+                    if (ImageHeight != "")
+                    {
+                        styleString += $"height: {ImageHeight};";
+                    }
+                    if (ImageWidth != "")
+                    {
+                        styleString += $"width: {ImageWidth};";
+                    }
+                    imageWriter.AddAttribute("style", styleString);
+                }
+                //If [PostBack] Then
 
-					//    imageWriter.AddAttribute("onclick", sPostBack)
-					//End If
-					imageWriter.AddAttribute("align", ImageAlign);
-					imageWriter.RenderBeginTag(HtmlTextWriterTag.Img);
-					imageWriter.RenderEndTag();
-				}
+                //    imageWriter.AddAttribute("onclick", sPostBack)
+                //End If
+                imageWriter.AddAttribute("align", ImageAlign);
+				imageWriter.RenderBeginTag(HtmlTextWriterTag.Img);
+				imageWriter.RenderEndTag();
+			}
+            if (ImageLocation.ToUpper() == "TOP")
+            {
+                innerWriter.Write("<br />");
+            }
 
-				innerWriter.Write("<span>" + Text + "</span>");
-			}
-			else if (ImageLocation.ToUpper() == "RIGHT")
-			{
-				var innerWriter = new HtmlTextWriter(writer);
-				innerWriter.Write("<span>" + Text + "</span>");
-				if (ImageUrl != "")
-				{
-					var imageWriter = new HtmlTextWriter(innerWriter);
-					imageWriter.AddAttribute(HtmlTextWriterAttribute.Src, Page.ResolveUrl(ImageUrl));
-					imageWriter.AddAttribute("hspace", HSpace);
-					imageWriter.AddAttribute("vspace", VSpace);
-					imageWriter.AddAttribute("border", "0");
-					//If [PostBack] Then
-					//    imageWriter.AddAttribute("onclick", sPostBack)
-					//End If
-					imageWriter.AddAttribute("align", ImageAlign);
-					imageWriter.RenderBeginTag(HtmlTextWriterTag.Img);
-					imageWriter.RenderEndTag();
-				}
-			}
-			else if (ImageLocation.ToUpper() == "TOP")
-			{
-				var innerWriter = new HtmlTextWriter(writer);
-				if (ImageUrl != "")
-				{
-					var imageWriter = new HtmlTextWriter(innerWriter);
-					imageWriter.AddAttribute(HtmlTextWriterAttribute.Src, Page.ResolveUrl(ImageUrl));
-					imageWriter.AddAttribute("hspace", HSpace);
-					imageWriter.AddAttribute("vspace", VSpace);
-					imageWriter.AddAttribute("border", "0");
-					//If [PostBack] Then
-					//    imageWriter.AddAttribute("onclick", sPostBack)
-					//End If
-					imageWriter.AddAttribute("align", ImageAlign);
-					imageWriter.RenderBeginTag(HtmlTextWriterTag.Img);
-					imageWriter.RenderEndTag();
-				}
-				innerWriter.Write("<br />");
-				innerWriter.Write("<span>" + Text + "</span>");
-
-			}
+            innerWriter.Write("<span>" + Text + "</span>");
 
 			//innerWriter.RenderEndTag()
 			writer.RenderEndTag();

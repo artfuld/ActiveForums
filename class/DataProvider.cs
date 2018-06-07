@@ -105,6 +105,7 @@ namespace DotNetNuke.Modules.ActiveForums
         public abstract IDataReader Reply_Get(int PortalId, int ModuleId, int TopicId, int ReplyId);
         public abstract void Reply_UpdateStatus(int PortalId, int ModuleId, int TopicId, int ReplyId, int UserId, int StatusId, bool IsMod);
         public abstract void Reply_Delete(int ForumId, int TopicId, int ReplyId, int DelBehavior);
+        public abstract void Reply_Restore(int replyId);
         #endregion
         
         #region Search
@@ -167,6 +168,7 @@ namespace DotNetNuke.Modules.ActiveForums
         public abstract int Topics_SaveToForum(int ForumId, int TopicId, int LastReplyId);
         public abstract void Replies_Split(int OldTopicId, int NewTopicId, string listreplies, DateTime DateUpdated, int FirstReplyId);
         public abstract void Topics_UpdateStatus(int PortalId, int ModuleId, int TopicId, int ReplyId, int TopicStatusId, int ReplyStatusId, int UserId);
+        public abstract void Topics_Restore(int topicId);
         #endregion
 
         #region Content
@@ -211,6 +213,13 @@ namespace DotNetNuke.Modules.ActiveForums
         public abstract IDataReader GetPostsByUser(int PortalId, int Rows, bool IsSuperUser, int currentUserId, int FilteredUserid, bool TopicsOnly, string ForumIds);
         #endregion
 
+        #region Recyclebin
+        public abstract void Recyclebin_RestorePost(int postId);
+        public abstract void Recyclebin_DeletePost(int postId);
+        public abstract void Recyclebin_RestoreTopic(int topicId);
+        public abstract void Recyclebin_DeleteTopic(int topicId);
+
+        #endregion
     }
 
 }

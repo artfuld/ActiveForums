@@ -23,7 +23,7 @@
 		var fd = document.getElementById("<%=txtForumDesc.ClientID%>");
 		if (fd != null){fd = fd.value}else{fd = ''};
 		var a = document.getElementById("<%=chkActive.ClientID%>").checked;
-	var h = document.getElementById("<%=chkHidden.ClientID%>").checked;
+	    var h = document.getElementById("<%=chkHidden.ClientID%>").checked;
 		var so = document.getElementById("<%=hidSortOrder.ClientID%>").value;
 		if (fid.value ==''){fid = 0;bSaveSettings=false;}else{fid = fid.value;bSaveSettings=true;};
 		if (fgpid){
@@ -34,280 +34,274 @@
 			currAction = 'groupsave';
 		};
 		var ig = document.getElementById("<%=chkInheritGroup.ClientID%>");
-	if (ig != null){
-		ig = ig.checked;
-		if (ig == true){
-			bSaveSettings = true;
-		};    
-	}else{
-		ig = false;
-		//bSaveSettings = true;
+	    if (ig != null){
+		    ig = ig.checked;
+		    if (ig == true){
+			    bSaveSettings = true;
+		    };    
+	    }else{
+		    ig = false;
+		    //bSaveSettings = true;
 
-	};
-	if (currAction == 'groupsave' || ig == false){
-		bSaveSettings = true;
-	}else if (ig == true && currAction=='groupsave') {
-		bSaveSettings = true;
-	}else {
+	    };
+	    if (currAction == 'groupsave' || ig == false){
+		    bSaveSettings = true;
+	    }else if (ig == true && currAction=='groupsave') {
+		    bSaveSettings = true;
+	    }else {
 
-		bSaveSettings = false;
-	};
-	var purl = document.getElementById("<%=txtPrefixURL.ClientID%>").value;
+		    bSaveSettings = false;
+	    };
+	    var purl = document.getElementById("<%=txtPrefixURL.ClientID%>").value;
 		<%=cbEditorAction.ClientID%>.Callback(currAction,fid,fgpid,fn,fd,a,h,so,ig,purl);
 	};
 
 	function cbEditorAction_complete(){
 
 		var forumId = document.getElementById("<%=hidEditorResult.ClientID%>").value;
-	document.getElementById("<%=hidForumId.ClientID%>").value = forumId;
+	    document.getElementById("<%=hidForumId.ClientID%>").value = forumId;
 
-	switch (currAction){
-		case 'forumsave':
-			af_setCurrObj(forumId,'F');
-			break;
-		case 'groupsave':
-			af_setCurrObj(forumId,'G');
-			break;       
-		case 'delforum':
-			bSaveSettings = false;
-			af_setCurrObj(0,'F');
-			break;
-		case 'delgroup':
-			bSaveSettings = false;
-			af_setCurrObj(0,'G');
-			break;   
+	    switch (currAction){
+		    case 'forumsave':
+			    af_setCurrObj(forumId,'F');
+			    break;
+		    case 'groupsave':
+			    af_setCurrObj(forumId,'G');
+			    break;       
+		    case 'delforum':
+			    bSaveSettings = false;
+			    af_setCurrObj(0,'F');
+			    break;
+		    case 'delgroup':
+			    bSaveSettings = false;
+			    af_setCurrObj(0,'G');
+			    break;   
 
-	}
-	if(bSaveSettings == true){
-		bSaveSettings = false;
-		saveSettings();
-	}else{
-		var fgpid = document.getElementById("<%=drpGroups.ClientID%>");
-		if (fgpid){
-			fgpid = fgpid.options[fgpid.selectedIndex].value;
-			if (fgpid.indexOf('GROUP') >= 0){
-				fgpid = fgpid.replace(/GROUP/,'');
-			};
-		}else{
-			fgpid = forumId;
-			forumId = -1;
-		};
-		window.top.af_refreshView(fgpid,forumId);
-	};
-	af_clearLoad();
-	switch (currAction){
-		case 'forumsave':
-			currAction = '';
-			amcp.UI.ShowSuccess('[RESX:Actions:ForumSaved]');
-			break;
-		case 'groupsave':
-			currAction = '';
-			amcp.UI.ShowSuccess('[RESX:Actions:GroupSaved]');
-			break;
-		case 'delforum':
-			currAction = '';
-			amcp.UI.ShowSuccess('[RESX:Actions:ForumDeleted]');
-			window.location.href = window.location.href;
-			break;
-		case 'delgroup':
-			currAction = '';
-			amcp.UI.ShowSuccess('[RESX:Actions:GroupDeleted]');
-			window.location.href = window.location.href;
-			break;
-	};
+        }
 
-};
+	    if(bSaveSettings == true){
+		    bSaveSettings = false;
+		    saveSettings();
+	    }else{
+		    var fgpid = document.getElementById("<%=drpGroups.ClientID%>");
+		    if (fgpid){
+			    fgpid = fgpid.options[fgpid.selectedIndex].value;
+			    if (fgpid.indexOf('GROUP') >= 0){
+				    fgpid = fgpid.replace(/GROUP/,'');
+			    };
+		    }else{
+			    fgpid = forumId;
+			    forumId = -1;
+		    };
+		    window.top.af_refreshView(fgpid,forumId);
+	    };
+	    af_clearLoad();
+	    switch (currAction){
+		    case 'forumsave':
+			    currAction = '';
+			    amcp.UI.ShowSuccess('[RESX:Actions:ForumSaved]');
+			    break;
+		    case 'groupsave':
+			    currAction = '';
+			    amcp.UI.ShowSuccess('[RESX:Actions:GroupSaved]');
+			    break;
+		    case 'delforum':
+			    currAction = '';
+			    amcp.UI.ShowSuccess('[RESX:Actions:ForumDeleted]');
+			    window.location.href = window.location.href;
+			    break;
+		    case 'delgroup':
+			    currAction = '';
+			    amcp.UI.ShowSuccess('[RESX:Actions:GroupDeleted]');
+			    window.location.href = window.location.href;
+			    break;
+	    };
 
-function saveSettings(gs){
-	var settingsAction = "forumsettingssave";
-	var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
-	var ig = document.getElementById("<%=chkInheritGroup.ClientID%>");
-	if (ig == null){
-		settingsAction = "groupsettingssave";
-		ig = false;
-	}else{
-		ig = ig.checked;
-	};
+    };
 
-	if (ig == false){
+    function saveSettings(gs){
+	    var settingsAction = "forumsettingssave";
+	    var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
+	    var ig = document.getElementById("<%=chkInheritGroup.ClientID%>");
+	    if (ig == null){
+		    settingsAction = "groupsettingssave";
+		    ig = false;
+	    }else{
+		    ig = ig.checked;
+	    };
 
-		var tt1 = document.getElementById("<%=drpTopicsTemplate.ClientID%>");
-        if (tt1.selectedIndex > 0) {
-            var TopicsTemplateId = tt1.options[tt1.selectedIndex].value;
-        } else {
-            var TopicsTemplateId = 0;
-        };
-		var tt2 = document.getElementById("<%=drpTopicTemplate.ClientID%>");
-        if (tt2.selectedIndex > 0) {
-            var TopicTemplateId = tt2.options[tt2.selectedIndex].value;
-        } else {
-            var TopicTemplateId = 0;
-        };
-		var tt3 = document.getElementById("<%=drpTopicForm.ClientID%>");
-        if (tt3.selectedIndex > 0) {
-            var TopicFormId = tt3.options[tt3.selectedIndex].value;
-        } else {
-            var TopicFormId = 0;
-        };
-	    var tt4 = document.getElementById("<%=drpReplyForm.ClientID%>");
-        if (tt4.selectedIndex > 0) {
-            var ReplyFormId = tt4.options[tt4.selectedIndex].value;
-        } else {
-            var ReplyFormId = 0;
-        };
-	    var tt6 = document.getElementById("<%=drpProfileDisplay.ClientID%>");
-        if (tt6.selectedIndex > 0) {
-            var ProfileTemplateId = tt6.options[tt6.selectedIndex].value;
-        } else {
-            var ProfileTemplateId = 0;
-        };
-	    var EmailAddress = document.getElementById("<%=txtEmailAddress.ClientID%>").value;
-	    var CreatePostCount = document.getElementById("<%=txtCreatePostCount.ClientID%>").value;
-	    var ReplyPostCount = document.getElementById("<%=txtReplyPostCount.ClientID%>").value;
-	    var UseFilter = document.getElementById("<%=rdFilterOn.ClientID%>").checked;
-		var AllowPostIcon = document.getElementById("<%=rdPostIconOn.ClientID%>").checked;
-		var AllowEmoticons = document.getElementById("<%=rdEmotOn.ClientID%>").checked;
-		var AllowScripts = document.getElementById("<%=rdScriptsOn.ClientID%>").checked;
-		var IndexContent = document.getElementById("<%=rdIndexOn.ClientID%>").checked;
-		var AllowRSS = document.getElementById("<%=rdRSSOn.ClientID%>").checked;
-		var AllowAttach = document.getElementById("<%=rdAttachOn.ClientID%>").checked;
+	    if (ig == false){
+
+		    var tt1 = document.getElementById("<%=drpTopicsTemplate.ClientID%>");
+            if (tt1.selectedIndex > 0) {
+                var TopicsTemplateId = tt1.options[tt1.selectedIndex].value;
+            } else {
+                var TopicsTemplateId = 0;
+            };
+		    var tt2 = document.getElementById("<%=drpTopicTemplate.ClientID%>");
+            if (tt2.selectedIndex > 0) {
+                var TopicTemplateId = tt2.options[tt2.selectedIndex].value;
+            } else {
+                var TopicTemplateId = 0;
+            };
+		    var tt3 = document.getElementById("<%=drpTopicForm.ClientID%>");
+            if (tt3.selectedIndex > 0) {
+                var TopicFormId = tt3.options[tt3.selectedIndex].value;
+            } else {
+                var TopicFormId = 0;
+            };
+	        var tt4 = document.getElementById("<%=drpReplyForm.ClientID%>");
+            if (tt4.selectedIndex > 0) {
+                var ReplyFormId = tt4.options[tt4.selectedIndex].value;
+            } else {
+                var ReplyFormId = 0;
+            };
+	        var tt6 = document.getElementById("<%=drpProfileDisplay.ClientID%>");
+            if (tt6.selectedIndex > 0) {
+                var ProfileTemplateId = tt6.options[tt6.selectedIndex].value;
+            } else {
+                var ProfileTemplateId = 0;
+            };
+	        var EmailAddress = document.getElementById("<%=txtEmailAddress.ClientID%>").value;
+	        var CreatePostCount = document.getElementById("<%=txtCreatePostCount.ClientID%>").value;
+	        var ReplyPostCount = document.getElementById("<%=txtReplyPostCount.ClientID%>").value;
+	        var UseFilter = document.getElementById("<%=rdFilterOn.ClientID%>").checked;
+		    var AllowPostIcon = document.getElementById("<%=rdPostIconOn.ClientID%>").checked;
+		    var AllowEmoticons = document.getElementById("<%=rdEmotOn.ClientID%>").checked;
+		    var AllowScripts = document.getElementById("<%=rdScriptsOn.ClientID%>").checked;
+		    var IndexContent = document.getElementById("<%=rdIndexOn.ClientID%>").checked;
+		    var AllowRSS = document.getElementById("<%=rdRSSOn.ClientID%>").checked;
+		    var AllowAttach = document.getElementById("<%=rdAttachOn.ClientID%>").checked;
 		
-		var AttachCount = document.getElementById("<%=txtMaxAttach.ClientID%>").value;
-		var AttachMaxSize = document.getElementById("<%=txtMaxAttachSize.ClientID%>").value;
-		var AttachTypeAllowed = document.getElementById("<%=txtAllowedTypes.ClientID%>").value; 
-		var AttachAllowBrowseSite = document.getElementById("<%=ckAllowBrowseSite.ClientID%>").checked;
-		var MaxAttachWidth = document.getElementById("<%=txtMaxAttachWidth.ClientID%>").value;
-		var MaxAttachHeight = document.getElementById("<%=txtMaxAttachHeight.ClientID%>").value;
-		var AttachInsertAllowed = document.getElementById("<%=ckAttachInsertAllowed.ClientID%>").checked;
-		var AttachConvertToJGPAllowed = document.getElementById("<%=ckConvertingToJpegAllowed.ClientID%>").checked;
+		    var AttachCount = document.getElementById("<%=txtMaxAttach.ClientID%>").value;
+		    var AttachMaxSize = document.getElementById("<%=txtMaxAttachSize.ClientID%>").value;
+		    var AttachTypeAllowed = document.getElementById("<%=txtAllowedTypes.ClientID%>").value; 
+		    var AttachAllowBrowseSite = document.getElementById("<%=ckAllowBrowseSite.ClientID%>").checked;
+		    var MaxAttachWidth = document.getElementById("<%=txtMaxAttachWidth.ClientID%>").value;
+		    var MaxAttachHeight = document.getElementById("<%=txtMaxAttachHeight.ClientID%>").value;
+		    var AttachInsertAllowed = document.getElementById("<%=ckAttachInsertAllowed.ClientID%>").checked;
+		    var AttachConvertToJGPAllowed = document.getElementById("<%=ckConvertingToJpegAllowed.ClientID%>").checked;
 
-		var AllowHtml = document.getElementById("<%=rdHTMLOn.ClientID%>").checked;
-		var ed1 = document.getElementById("<%=drpEditorTypes.ClientID%>");
-        if (ed1.selectedIndex >= 0) {
-            var EditorType = ed1.options[ed1.selectedIndex].value;
-        } else {
-            var EditorType = 0;
-        };
-		var EditorHeight = document.getElementById("<%=txtEditorHeight.ClientID%>").value;
-		var EditorWidth = document.getElementById("<%=txtEditorWidth.ClientID%>").value;
-		var ed6 = document.getElementById("<%=drpPermittedRoles.ClientID%>");
-        if (ed6.selectedIndex >= 0) {
-            var EditorPermittedRoles = ed6.options[ed6.selectedIndex].value;
-        } else {
-            var EditorPermittedRoles = 0;
-        };
-	    var edm = document.getElementById("<%=drpEditorMobile.ClientID%>");
-        if (edm.selectedIndex >= 0) {
-            var EditorMobile = edm.options[edm.selectedIndex].value;
-        } else {
-            var EditorMobile = 0;
-        };
+		    var AllowHtml = document.getElementById("<%=rdHTMLOn.ClientID%>").checked;
+		    var ed1 = document.getElementById("<%=drpEditorTypes.ClientID%>");
+            if (ed1.selectedIndex >= 0) {
+                var EditorType = ed1.options[ed1.selectedIndex].value;
+            } else {
+                var EditorType = 0;
+            };
+		    var EditorHeight = document.getElementById("<%=txtEditorHeight.ClientID%>").value;
+		    var EditorWidth = document.getElementById("<%=txtEditorWidth.ClientID%>").value;
+		    var ed6 = document.getElementById("<%=drpPermittedRoles.ClientID%>");
+            if (ed6.selectedIndex >= 0) {
+                var EditorPermittedRoles = ed6.options[ed6.selectedIndex].value;
+            } else {
+                var EditorPermittedRoles = 0;
+            };
+	        var edm = document.getElementById("<%=drpEditorMobile.ClientID%>");
+            if (edm.selectedIndex >= 0) {
+                var EditorMobile = edm.options[edm.selectedIndex].value;
+            } else {
+                var EditorMobile = 0;
+            };
 		
-		var IsModerated = document.getElementById("<%=rdModOn.ClientID%>").checked;
-	    var md1 = document.getElementById("<%=drpDefaultTrust.ClientID%>");
-        if (md1.selectedIndex > 0) {
-            var DefaultTrustLevel = md1.options[md1.selectedIndex].value;
-        } else {
-            var DefaultTrustLevel = 0;
-        };
-		var AutoTrustLevel = document.getElementById("<%=txtAutoTrustLevel.ClientID%>").value;
-		var md3 = document.getElementById("<%=drpModApprovedTemplateId.ClientID%>");
-        if (md3.selectedIndex > 0) {
-            var ModApproveTemplateId = md3.options[md3.selectedIndex].value;
-        } else {
-            var ModApproveTemplateId = 0;
-        };
-		var md4 = document.getElementById("<%=drpModRejectTemplateId.ClientID%>");
-        if (md4.selectedIndex > 0) {
-            var ModRejectTemplateId = md4.options[md4.selectedIndex].value;
-        } else {
-            var ModRejectTemplateId = 0;
-        };
-		var md5 = document.getElementById("<%=drpModMoveTemplateId.ClientID%>");
-        if (md5.selectedIndex > 0) {
-            var ModMoveTemplateId = md5.options[md5.selectedIndex].value;
-        } else {
-            var ModMoveTemplateId = 0;
-        };
-	    var md6 = document.getElementById("<%=drpModDeleteTemplateId.ClientID%>");
-        if (md6.selectedIndex > 0) {
-            var ModDeleteTemplateId = md6.options[md6.selectedIndex].value;
-        } else {
-            var ModDeleteTemplateId = 0;
-        };
-	    var md7 = document.getElementById("<%=drpModNotifyTemplateId.ClientID%>");
-        if (md7.selectedIndex > 0) {
-            var ModNotifyTemplateId = md7.options[md7.selectedIndex].value;
-        } else {
-            var ModNotifyTemplateId = 0;
-        };
-	    var as = document.getElementById("<%=rdAutoSubOn.ClientID%>");
-	    var as1 = document.getElementById('<%=hidRoles.ClientID%>');
-		if (as != null){
-			var AutoSubscribeEnabled = as.checked;
-			var AutoSubscribeRoles = as1.value;
-		}else{
-			var AutoSubscribeEnabled = false;
-			var AutoSubscribeRoles = ''
-        };
-	    var AutoSubscribeNewTopicsOnly = document.getElementById("<%=chkAutoSubscribeNewTopicsOnly.ClientID%>").checked;
-	    if (AutoSubscribeNewTopicsOnly == null){AutoSubscribeNewTopicsOnly = false;};
+		    var IsModerated = document.getElementById("<%=rdModOn.ClientID%>").checked;
+	        var md1 = document.getElementById("<%=drpDefaultTrust.ClientID%>");
+            if (md1.selectedIndex > 0) {
+                var DefaultTrustLevel = md1.options[md1.selectedIndex].value;
+            } else {
+                var DefaultTrustLevel = 0;
+            };
+		    var AutoTrustLevel = document.getElementById("<%=txtAutoTrustLevel.ClientID%>").value;
+		    var md3 = document.getElementById("<%=drpModApprovedTemplateId.ClientID%>");
+            if (md3.selectedIndex > 0) {
+                var ModApproveTemplateId = md3.options[md3.selectedIndex].value;
+            } else {
+                var ModApproveTemplateId = 0;
+            };
+		    var md4 = document.getElementById("<%=drpModRejectTemplateId.ClientID%>");
+            if (md4.selectedIndex > 0) {
+                var ModRejectTemplateId = md4.options[md4.selectedIndex].value;
+            } else {
+                var ModRejectTemplateId = 0;
+            };
+		    var md5 = document.getElementById("<%=drpModMoveTemplateId.ClientID%>");
+            if (md5.selectedIndex > 0) {
+                var ModMoveTemplateId = md5.options[md5.selectedIndex].value;
+            } else {
+                var ModMoveTemplateId = 0;
+            };
+	        var md6 = document.getElementById("<%=drpModDeleteTemplateId.ClientID%>");
+            if (md6.selectedIndex > 0) {
+                var ModDeleteTemplateId = md6.options[md6.selectedIndex].value;
+            } else {
+                var ModDeleteTemplateId = 0;
+            };
+	        var md7 = document.getElementById("<%=drpModNotifyTemplateId.ClientID%>");
+            if (md7.selectedIndex > 0) {
+                var ModNotifyTemplateId = md7.options[md7.selectedIndex].value;
+            } else {
+                var ModNotifyTemplateId = 0;
+            };
+	        var as = document.getElementById("<%=rdAutoSubOn.ClientID%>");
+	        var as1 = document.getElementById('<%=hidRoles.ClientID%>');
+		    if (as != null){
+			    var AutoSubscribeEnabled = as.checked;
+			    var AutoSubscribeRoles = as1.value;
+		    }else{
+			    var AutoSubscribeEnabled = false;
+			    var AutoSubscribeRoles = ''
+            };
+	        var AutoSubscribeNewTopicsOnly = document.getElementById("<%=chkAutoSubscribeNewTopicsOnly.ClientID%>").checked;
+	        if (AutoSubscribeNewTopicsOnly == null){AutoSubscribeNewTopicsOnly = false;};
 
-        var AllowLikes = document.getElementById("<%=rdLikesOn.ClientID%>").checked;
-	};
+            var AllowLikes = document.getElementById("<%=rdLikesOn.ClientID%>").checked;
+	    };
 
+	    <%=cbEditorAction.ClientID%>.Callback(settingsAction, forumid, TopicsTemplateId, TopicTemplateId, EmailAddress, UseFilter, AllowPostIcon, AllowEmoticons, AllowScripts,
+            IndexContent, AllowRSS, AllowAttach, AttachCount, AttachMaxSize, AttachTypeAllowed, EditorMobile, AllowLikes, ReplyPostCount, AttachAllowBrowseSite, AttachInsertAllowed, MaxAttachWidth,
+            MaxAttachHeight, AttachConvertToJGPAllowed, AllowHtml, EditorType, EditorHeight, EditorWidth, CreatePostCount, AutoSubscribeNewTopicsOnly, EditorPermittedRoles, TopicFormId, ReplyFormId,
+            AutoSubscribeRoles, ProfileTemplateId, IsModerated, DefaultTrustLevel, AutoTrustLevel, ModApproveTemplateId, ModRejectTemplateId, ModMoveTemplateId, ModDeleteTemplateId,
+            ModNotifyTemplateId, AutoSubscribeEnabled);
+    };
 
-	<%=cbEditorAction.ClientID%>.Callback(settingsAction, forumid, TopicsTemplateId, TopicTemplateId, EmailAddress, UseFilter, AllowPostIcon, AllowEmoticons, AllowScripts,
-        IndexContent, AllowRSS, AllowAttach, AttachCount, AttachMaxSize, AttachTypeAllowed, EditorMobile, AllowLikes, ReplyPostCount, AttachAllowBrowseSite, AttachInsertAllowed, MaxAttachWidth,
-        MaxAttachHeight, AttachConvertToJGPAllowed, AllowHtml, EditorType, EditorHeight, EditorWidth, CreatePostCount, AutoSubscribeNewTopicsOnly, EditorPermittedRoles, TopicFormId, ReplyFormId,
-        AutoSubscribeRoles, ProfileTemplateId, IsModerated, DefaultTrustLevel, AutoTrustLevel, ModApproveTemplateId, ModRejectTemplateId, ModMoveTemplateId, ModDeleteTemplateId,
-        ModNotifyTemplateId, AutoSubscribeEnabled);
+    function toggleEditor(obj){
+	    closeAllProp();
+	    var editor = document.getElementById("<%=cfgHTML.ClientID%>");
+	    if (obj.value == '1'){
+		    editor.style.display = '';
+	    }else{
+		    editor.style.display = 'none';
+		    var winDiv = document.getElementById('edProp');
+		    winDiv.style.display = 'none';
+	    };
+    };
+    function toggleEditorFields(){
+	    var ed1 = document.getElementById("<%=drpEditorTypes.ClientID%>");
+	    if (ed1.selectedIndex >= 0){ed1 = ed1.options[ed1.selectedIndex].value;}else{ed1 = 0;};
+    };
+    function toggleMod(obj){
+	    closeAllProp();
+	    var mod = document.getElementById("<%=cfgMod.ClientID%>");
+	    if (obj.value == '1'){
+		    mod.style.display = '';
+	    }else{
+		    mod.style.display = 'none';
+		    var winDiv = document.getElementById('modProp');
+		    mod.style.display = 'none';
+	    };
+    };
 
-
-};
-
-
-
-
-
-function toggleEditor(obj){
-	closeAllProp();
-	var editor = document.getElementById("<%=cfgHTML.ClientID%>");
-	if (obj.value == '1'){
-		editor.style.display = '';
-	}else{
-		editor.style.display = 'none';
-		var winDiv = document.getElementById('edProp');
-		winDiv.style.display = 'none';
-	};
-};
-function toggleEditorFields(){
-	var ed1 = document.getElementById("<%=drpEditorTypes.ClientID%>");
-	if (ed1.selectedIndex >= 0){ed1 = ed1.options[ed1.selectedIndex].value;}else{ed1 = 0;};
-};
-function toggleMod(obj){
-	closeAllProp();
-	var mod = document.getElementById("<%=cfgMod.ClientID%>");
-	if (obj.value == '1'){
-		mod.style.display = '';
-	}else{
-		mod.style.display = 'none';
-		var winDiv = document.getElementById('modProp');
-		mod.style.display = 'none';
-	};
-};
-
-function toggleAttach(obj){
-		closeAllProp();
-		var attach = document.getElementById("<%=cfgAttach.ClientID%>");
-	if (obj.value == '1'){
-		attach.style.display = '';
-	}else{
-		attach.style.display = 'none';
-		var winDiv = document.getElementById('attachProp');
-		attach.style.display = 'none';
-	};
-};
+    function toggleAttach(obj){
+		    closeAllProp();
+		    var attach = document.getElementById("<%=cfgAttach.ClientID%>");
+	    if (obj.value == '1'){
+		    attach.style.display = '';
+	    }else{
+		    attach.style.display = 'none';
+		    var winDiv = document.getElementById('attachProp');
+		    attach.style.display = 'none';
+	    };
+    };
 
 
 	function showProp(obj,win){
@@ -332,95 +326,97 @@ function toggleAttach(obj){
         }
 	};
 
+    function addRole(){
+	    var drp = document.getElementById('<%=drpRoles.ClientID%>');
+	    var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
+	    if (drp.selectedIndex > 0){
+		    var tb = document.getElementById('tblRoles');
+		    var lastRow = tb.rows.length;
+		    var iteration = lastRow;
+		    var row = tb.insertRow(lastRow);
+		    var cellLeft = row.insertCell(0);
+		    var textNode = document.createTextNode(iteration);
+		    textNode.nodeValue = drp.options[drp.selectedIndex].text;
+		    cellLeft.appendChild(textNode)
+		    var cellRight = row.insertCell(1);
+		    var img = document.createElement('img');
+		    img.src = '<%=Page.ResolveUrl("~/desktopmodules/activeforums/images/delete16.png")%>';
+		    img.onclick = function() {removeRole(this,drp.options[drp.selectedIndex].value)};
+		    cellRight.appendChild(img);        
+		    var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
+		    var newRole = drp.options[drp.selectedIndex].value;
+		    var arRoles = hidRoles.value.split(';');
+		    var addRole = true;
+		    for ( var i=0, len=arRoles.length; i<len; ++i ){
+			    if (arRoles[i] == newRole){
+				    addRole = false;
+				    break;
+			    };
+		    };
+		    if (addRole){
+			    hidRoles.value = hidRoles.value + newRole + ';';
+		    };
+	    };
+    };
 
-function addRole(){
-	var drp = document.getElementById('<%=drpRoles.ClientID%>');
-	var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
-	if (drp.selectedIndex > 0){
-		var tb = document.getElementById('tblRoles');
-		var lastRow = tb.rows.length;
-		var iteration = lastRow;
-		var row = tb.insertRow(lastRow);
-		var cellLeft = row.insertCell(0);
-		var textNode = document.createTextNode(iteration);
-		textNode.nodeValue = drp.options[drp.selectedIndex].text;
-		cellLeft.appendChild(textNode)
-		var cellRight = row.insertCell(1);
-		var img = document.createElement('img');
-		img.src = '<%=Page.ResolveUrl("~/desktopmodules/activeforums/images/delete16.png")%>';
-		img.onclick = function() {removeRole(this,drp.options[drp.selectedIndex].value)};
-		cellRight.appendChild(img);        
-		var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
-		var newRole = drp.options[drp.selectedIndex].value;
-		var arRoles = hidRoles.value.split(';');
-		var addRole = true;
-		for ( var i=0, len=arRoles.length; i<len; ++i ){
-			if (arRoles[i] == newRole){
-				addRole = false;
-				break;
-			};
-		};
-		if (addRole){
-			hidRoles.value = hidRoles.value + newRole + ';';
-		};
-	};
-};
-function removeRole(item,roleid){
-	var tb = document.getElementById('tblRoles');
-	tb.deleteRow(item.parentNode.parentNode.rowIndex);
-	var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
-	var arRoles = hidRoles.value.split(';');
-	hidRoles.value = '';
-	var newRoles = '';
-	for ( var i=0, len=arRoles.length; i<len; ++i ){
-		if (arRoles[i] != roleid){
-			if (arRoles[i] != ''){
-				newRoles += arRoles[i] + ';';
-			}
-		};
-	};
-	hidRoles.value = newRoles;
-};
-function deleteForum(){
-	currAction = 'delforum';
-	if (confirm('[RESX:Actions:FinalConfirm]')){
-		var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
-		<%=cbEditorAction.ClientID%>.Callback('deleteforum',forumid);
-	};
-};
-function deleteGroup(){
-	currAction = 'delgroup';
-	if (confirm('[RESX:Actions:FinalConfirm]')){
-		var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
-		<%=cbEditorAction.ClientID%>.Callback('deletegroup',forumid);
-	};
-};
-function amaf_toggleInherit(){
-	var chk = document.getElementById('<%=chkInheritGroup.ClientID%>');
-	var trTmp = document.getElementById('<%=trTemplates.ClientID%>');
-	var divSec = document.getElementById('divSecurity');
-	var divSet = document.getElementById('divSettings');
-	if (chk.checked) {
-		trTmp.style.display = 'none';
-		if (divSec != null){
-			divSec.style.display = 'none';
-		};
-		if (divSet != null){
-			divSet.style.display = 'none';
-		};
+    function removeRole(item,roleid){
+	    var tb = document.getElementById('tblRoles');
+	    tb.deleteRow(item.parentNode.parentNode.rowIndex);
+	    var hidRoles = document.getElementById('<%=hidRoles.ClientID%>');
+	    var arRoles = hidRoles.value.split(';');
+	    hidRoles.value = '';
+	    var newRoles = '';
+	    for ( var i=0, len=arRoles.length; i<len; ++i ){
+		    if (arRoles[i] != roleid){
+			    if (arRoles[i] != ''){
+				    newRoles += arRoles[i] + ';';
+			    }
+		    };
+	    };
+	    hidRoles.value = newRoles;
+    };
 
-	}else{
-		forumSave();
-		trTmp.style.display = '';
-		var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
-		if (forumid != ''){
-			divSec.style.display = '';
-			divSet.style.display = '';
-		};
-	};
-};
+    function deleteForum(){
+	    currAction = 'delforum';
+	    if (confirm('[RESX:Actions:FinalConfirm]')){
+		    var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
+		    <%=cbEditorAction.ClientID%>.Callback('deleteforum',forumid);
+	    };
+    };
 
-function maintRun(opt){
+    function deleteGroup(){
+	    currAction = 'delgroup';
+	    if (confirm('[RESX:Actions:FinalConfirm]')){
+		    var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
+		    <%=cbEditorAction.ClientID%>.Callback('deletegroup',forumid);
+	    };
+    };
+
+    function amaf_toggleInherit(){
+	    var chk = document.getElementById('<%=chkInheritGroup.ClientID%>');
+	    var trTmp = document.getElementById('<%=trTemplates.ClientID%>');
+	    var divSec = document.getElementById('divSecurity');
+	    var divSet = document.getElementById('divSettings');
+	    if (chk.checked) {
+		    trTmp.style.display = 'none';
+		    if (divSec != null){
+			    divSec.style.display = 'none';
+		    };
+		    if (divSet != null){
+			    divSet.style.display = 'none';
+		    };
+	    }else{
+		    forumSave();
+		    trTmp.style.display = '';
+		    var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
+		    if (forumid != ''){
+			    divSec.style.display = '';
+			    divSet.style.display = '';
+		    };
+	    };
+    };
+
+function maintRun(opt) {
 	var topicsOlderThan = 0;
 	var topicsByUser = 0;
 	var activityOlderThan = 0;
@@ -433,50 +429,49 @@ function maintRun(opt){
 	if (chkTopicsOlderThan && document.getElementById("<%=txtOlderThan.ClientID%>").value != ''){
 		topicsOlderThan = document.getElementById("<%=txtOlderThan.ClientID%>").value;
 		selected = true;
-	}else if (chkTopicsOlderThan){
-
+	} else if (chkTopicsOlderThan) {
 		canGo = false;
 	};
 	if (chkUserId && document.getElementById("<%=txtUserId.ClientID%>").value != ''){
 		topicsByUser = document.getElementById("<%=txtUserId.ClientID%>").value;
-			selected = true;
-		}else if (chkUserId ){
+		selected = true;
+	}else if (chkUserId ){
 
-			canGo = false;
-		};
-		if (chkActivityOlderThan && document.getElementById("<%=txtReplyOlderThan.ClientID%>").value != ''){
+		canGo = false;
+	};
+	if (chkActivityOlderThan && document.getElementById("<%=txtReplyOlderThan.ClientID%>").value != ''){
 		activityOlderThan = document.getElementById("<%=txtReplyOlderThan.ClientID%>").value;
-			selected = true;
-		}else if (chkActivityOlderThan){
-			canGo = false;
-		};
-		var auth = false;
-		if (opt == 0){
-			if (confirm('[RESX:Warning:Maint]')){
-				auth = true;
-			};
-		}else{
+		selected = true;
+	}else if (chkActivityOlderThan){
+		canGo = false;
+	};
+	var auth = false;
+	if (opt == 0){
+		if (confirm('[RESX:Warning:Maint]')){
 			auth = true;
 		};
-		if (noReplies) {
-			selected = true;
-		};
-		if (auth && canGo == true && selected == true){
-			var dryRun = false;
-			if (opt == 1) {
-				dryRun = true;
-			}
-			var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
-			var data = {};
-			data.ModuleId = <%=ModuleId %>;
-	data.ForumId = forumid;
-	data.olderThan = topicsOlderThan;
-	data.byUserId = topicsByUser;
-	data.lastActive = activityOlderThan;
-	data.withNoReplies = noReplies;
-	data.dryRun = dryRun;
-	var sf = $.ServicesFramework(<%=ModuleId%>);
-			//sf.getAntiForgeryProperty(data);
+	}else{
+		auth = true;
+	};
+	if (noReplies) {
+		selected = true;
+	};
+	if (auth && canGo == true && selected == true){
+		var dryRun = false;
+		if (opt == 1) {
+			dryRun = true;
+		}
+		var forumid = document.getElementById("<%=hidForumId.ClientID%>").value;
+		var data = {};
+		data.ModuleId = <%=ModuleId %>;
+	    data.ForumId = forumid;
+	    data.olderThan = topicsOlderThan;
+	    data.byUserId = topicsByUser;
+	    data.lastActive = activityOlderThan;
+	    data.withNoReplies = noReplies;
+	    data.dryRun = dryRun;
+	    var sf = $.ServicesFramework(<%=ModuleId%>);
+		//sf.getAntiForgeryProperty(data);
 		$.ajax({
 			type: "POST",
 			url: sf.getServiceRoot('ActiveForums') + "AdminService/RunMaintenance",
@@ -560,17 +555,18 @@ function afadmin_getPropertyInput() {
 	return asprop;
 
 };
-function afadmin_getProperties() {
-	var ul = document.getElementById('proplist');
-	ul.style.display = 'block';
-	afadmin_cancelPropForm()
-	var req = {};
-	req.action = 4;
-	req.ObjectType = 1;
-	var objId = afGet('<%=hidForumId.ClientID%>');
+    function afadmin_getProperties() {
+	    var ul = document.getElementById('proplist');
+	    ul.style.display = 'block';
+	    afadmin_cancelPropForm()
+	    var req = {};
+	    req.action = 4;
+	    req.ObjectType = 1;
+	    var objId = afGet('<%=hidForumId.ClientID%>');
 		req.ObjectOwnerId = objId;
 		afadmin_callback(JSON.stringify(req), afadmin_buildProperties);
-	};
+    };
+
 	function afadmin_buildProperties(result) {
 		asproplist = result;
 		var ul = document.getElementById('proplist');

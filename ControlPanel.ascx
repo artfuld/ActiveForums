@@ -157,7 +157,8 @@
 			<am:imagebutton id="btnRanks" runat="server" Height="50" Width="50" PostBack="False" ClientSideScript="LoadView('ranks');" ImageLocation="TOP" text="[RESX:Ranks]" ImageUrl="~/DesktopModules/ActiveForums/images/ranks32.png" />
 			<am:imagebutton id="btnTags" runat="server" Height="50" Width="50" PostBack="False" ClientSideScript="LoadView('tags');" ImageLocation="TOP" text="[RESX:Tags]" ImageUrl="~/DesktopModules/ActiveForums/images/tags32.png" />
 			<am:imagebutton id="btnCategories" runat="server" Height="50" Width="50" PostBack="False" ClientSideScript="LoadView('categories');" ImageLocation="TOP" text="[RESX:Categories]" ImageUrl="~/DesktopModules/ActiveForums/images/categories32.png" />
-			<am:imagebutton id="btnReturn" runat="server" Height="50" Width="50" PostBack="False" ImageLocation="TOP" text="[RESX:Exit]" ImageUrl="~/DesktopModules/ActiveForums/images/return32.png" />
+            <am:imagebutton id="btnRecyclebin" runat="server" Height="50" Width="50" PostBack="False" ClientSideScript="LoadView('recyclebin');" ImageLocation="TOP" text="[RESX:Recyclebin]" ImageUrl="~/DesktopModules/ActiveForums/images/trash.svg" ImageHeight="32px" ImageWidth="32px" />
+            <am:imagebutton id="btnReturn" runat="server" Height="50" Width="50" PostBack="False" ImageLocation="TOP" text="[RESX:Exit]" ImageUrl="~/DesktopModules/ActiveForums/images/return32.png" />
 		</div>
 	</div>
 	<am:CallBack id="cbShell" runat="server" Debug="false" CssClass="amcpshell" OnCallbackComplete="af_shellComplete">

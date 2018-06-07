@@ -7,7 +7,7 @@ using System.Text;
 namespace DotNetNuke.Modules.ActiveForums.DAL2
 {
     [TableName("activeforums_Content")]
-    [PrimaryKey("ContentId")]
+    [PrimaryKey("ContentId", AutoIncrement = true)]
     class Content
     {
         public int ContentId { get; set; }

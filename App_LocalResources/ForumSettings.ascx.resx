@@ -483,4 +483,7 @@
   <data name="FullTextNotInstalled.Text" xml:space="preserve">
     <value>Full text search is not installed on the SQL Server.</value>
   </data>
+  <data name="Recyclebin.Text" xml:space="preserve">
+    <value>Recyclebin</value>
+  </data>
 </root>
